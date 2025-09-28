@@ -23,6 +23,7 @@ using std::getline;
 using std::numeric_limits;
 using std::streamsize;
 using std::ifstream;
+using std::ofstream;
 using std::istringstream;
 
 struct Studentas {
@@ -76,7 +77,7 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
     }
 
     string eilute;
-    getline(in, eilute); // praleidžiam antraštę
+    getline(in, eilute); // praleidziam antraste
 
     while (getline(in, eilute)) {
         if (eilute.empty()) continue;
@@ -170,37 +171,44 @@ int main() {
                   return a.vardas < b.vardas;
               });
 
-    cout << "\nRezultatai:\n";
-    cout << setw(15) << left << "Vardas"
-         << setw(15) << left << "Pavarde";
-
-    if (pasirinkimas == 1)
-        cout << setw(20) << right << "Galutinis (Vid.)";
-    else if (pasirinkimas == 2)
-        cout << setw(20) << right << "Galutinis (Med.)";
-    else
-        cout << setw(20) << right << "Galutinis (Vid.)"
-             << setw(20) << right << "Galutinis (Med.)";
-
-    cout << endl;
-    cout << string(70, '-') << endl;
-
-    for (auto &st : grupe) {
-        cout << setw(15) << left << st.vardas
-             << setw(15) << left << st.pavarde;
-
-        if (pasirinkimas == 1)
-            cout << setw(20) << right << fixed << setprecision(2) << st.galutinisVid;
-        else if (pasirinkimas == 2)
-            cout << setw(20) << right << fixed << setprecision(2) << st.galutinisMed;
-        else
-            cout << setw(20) << right << fixed << setprecision(2) << st.galutinisVid
-                 << setw(20) << right << fixed << setprecision(2) << st.galutinisMed;
-
-        cout << endl;
+    
+    ofstream out("/Users/kornelijadambrauskaite/Desktop/rezultatai.txt");
+    if (!out) {
+        std::cerr << "Nepavyko sukurti failo rezultatai.txt\n";
+        return 1;
     }
 
+    out << setw(15) << left << "Vardas"
+        << setw(15) << left << "Pavarde";
+    if (pasirinkimas == 1)
+        out << setw(20) << right << "Galutinis (Vid.)";
+    else if (pasirinkimas == 2)
+        out << setw(20) << right << "Galutinis (Med.)";
+    else
+        out << setw(20) << right << "Galutinis (Vid.)"
+            << setw(20) << right << "Galutinis (Med.)";
+    out << endl;
+    out << string(70, '-') << endl;
+
+
+    for (auto &st : grupe) {
+        out << setw(15) << left << st.vardas
+            << setw(15) << left << st.pavarde;
+
+        if (pasirinkimas == 1)
+            out << setw(20) << right << fixed << setprecision(2) << st.galutinisVid;
+        else if (pasirinkimas == 2)
+            out << setw(20) << right << fixed << setprecision(2) << st.galutinisMed;
+        else
+            out << setw(20) << right << fixed << setprecision(2) << st.galutinisVid
+                << setw(20) << right << fixed << setprecision(2) << st.galutinisMed;
+
+        out << endl;
+    }
+
+    cout << "\nRezultatai irasyti i faila 'rezultatai.txt'\n";
+
     return 0;
-} 
+}
 
 
