@@ -8,6 +8,9 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
+#include <chrono>
+#include <random>
+
 
 using std::cout;
 using std::cin;
@@ -30,8 +33,7 @@ struct Studentas {
     string pavarde;
     vector<int> pazymiai;
     int egzaminas{};
-    double galutinisVid{};
-    double galutinisMed{};
+    double galutinis{};
 };
 
 // vidurkio skaiciavimo funkcija
@@ -51,6 +53,9 @@ double median(vector<int> v) {
         return (v[n/2 - 1] + v[n/2]) / 2.0;
     else
         return v[n/2];
+}
+double skaiciuotiGalutini(const vector<int>& paz, int egz) {
+    return average(paz) * 0.4 + egz * 0.6;
 }
 
 Studentas generuotiStudenta() {
