@@ -13,4 +13,11 @@ int main() {
 
     for (int kiek : kiekiai) {
         cout << "\n=== TESTAS: " << kiek << " studentu ===\n";
-
+        
+        auto start = std::chrono::high_resolution_clock::now();
+                string failas = "studentai" + std::to_string(kiek) + ".txt";
+                generuotiFaila(failas, kiek);
+                auto end = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> diff = end - start;
+                cout << "Failo generavimas: " << diff.count() << " s\n";
+        
