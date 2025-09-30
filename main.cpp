@@ -27,4 +27,13 @@ int main() {
                 diff = end - start;
                 cout << "Failo nuskaitymas: " << diff.count() << " s\n";
 
+        start = std::chrono::high_resolution_clock::now();
+                padalintiStudentus(grupe, "vargsiukai.txt", "kietiakiai.txt");
+                end = std::chrono::high_resolution_clock::now();
+                diff = end - start;
+                cout << "Padalinimas i 2 grupes ir isvedimas: " << diff.count() << " s\n";
+    }
+
+    return 0;
+}
         
