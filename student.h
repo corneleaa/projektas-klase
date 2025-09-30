@@ -47,4 +47,5 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas);
 void padalintiStudentus(const vector<Studentas>& grupe,
                         const string& failasVargsiukai,
                         const string& failasKietiakiai);
+#endif
 
