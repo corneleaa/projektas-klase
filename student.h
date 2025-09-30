@@ -38,5 +38,13 @@ struct Studentas {
     double galutinis{};
 };
 
-
+double skaiciuotiVidurki(const vector<int>& v);
+double skaiciuotiMediana(vector<int> v);
+double skaiciuotiGalutini(const vector<int>& paz, int egz);
+Studentas generuotiStudenta(int id);
+void generuotiFaila(const string& failoVardas, int kiek);
+vector<Studentas> nuskaitytiIsFailo(const string& failoVardas);
+void padalintiStudentus(const vector<Studentas>& grupe,
+                        const string& failasVargsiukai,
+                        const string& failasKietiakiai);
 
