@@ -21,3 +21,10 @@ int main() {
                 std::chrono::duration<double> diff = end - start;
                 cout << "Failo generavimas: " << diff.count() << " s\n";
         
+        start = std::chrono::high_resolution_clock::now();
+                vector<Studentas> grupe = nuskaitytiIsFailo(failas);
+                end = std::chrono::high_resolution_clock::now();
+                diff = end - start;
+                cout << "Failo nuskaitymas: " << diff.count() << " s\n";
+
+        
