@@ -2,9 +2,10 @@
 #include <chrono>
 #include "studentas.h"
 
-using cout;
-using endl;
-using vector;
+using std::cout;   // taisyta: reikia su std::
+using std::endl;
+using std::vector;
+using std::string;
 
 int main() {
     srand(time(nullptr));
@@ -15,25 +16,29 @@ int main() {
         cout << "\n=== TESTAS: " << kiek << " studentu ===\n";
         
         auto start = std::chrono::high_resolution_clock::now();
-                string failas = "studentai" + std::to_string(kiek) + ".txt";
-                generuotiFaila(failas, kiek);
-                auto end = std::chrono::high_resolution_clock::now();
-                std::chrono::duration<double> diff = end - start;
-                cout << "Failo generavimas: " << diff.count() << " s\n";
+        string failas = "studentai" + std::to_string(kiek) + ".txt";
+        generuotiFaila(failas, kiek);
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> diff = end - start;
+        cout << "Failo generavimas: " << diff.count() << " s\n";
         
         start = std::chrono::high_resolution_clock::now();
-                vector<Studentas> grupe = nuskaitytiIsFailo(failas);
-                end = std::chrono::high_resolution_clock::now();
-                diff = end - start;
-                cout << "Failo nuskaitymas: " << diff.count() << " s\n";
+        vector<Studentas> grupe = nuskaitytiIsFailo(failas);
+        end = std::chrono::high_resolution_clock::now();
+        diff = end - start;
+        cout << "Failo nuskaitymas: " << diff.count() << " s\n";
 
         start = std::chrono::high_resolution_clock::now();
-                padalintiStudentus(grupe, "vargsiukai.txt", "kietiakiai.txt");
-                end = std::chrono::high_resolution_clock::now();
-                diff = end - start;
-                cout << "Padalinimas i 2 grupes ir isvedimas: " << diff.count() << " s\n";
+        vector<Studentas> vargsiukai;
+        vector<Studentas> kietiakiai;
+        padalintiStudentusTik(grupe, vargsiukai, kietiakiai);
+        isvestiStudentus(vargsiukai, "vargsiukai.txt");
+        isvestiStudentus(kietiakiai, "kietiakiai.txt");
+        end = std::chrono::high_resolution_clock::now();
+        diff = end - start;
+        cout << "Padalinimas i 2 grupes ir isvedimas: " << diff.count() << " s\n";
     }
 
     return 0;
 }
-        
+
