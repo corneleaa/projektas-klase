@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-using string;
-using vector;
+using std::string;
+using std::vector;
 
 struct Studentas {
     string vardas;
