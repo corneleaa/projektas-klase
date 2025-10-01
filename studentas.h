@@ -25,5 +25,11 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas);
 void padalintiStudentus(const vector<Studentas>& grupe,
                         const string& failasVargsiukai,
                         const string& failasKietiakiai);
+
+void rikiuotiStudentus(vector<Studentas>& grupe, const string& pagal);
+void padalintiStudentusTik(vector<Studentas>& grupe, vector<Studentas>& vargs, vector<Studentas>& kiet);
+void isvestiStudentus(const vector<Studentas>& grupe, const string& failoVardas);
+void processStreaming(const string& failoVardas, const string& failasVargs, const string& failasKiet); 
+
 #endif
 
