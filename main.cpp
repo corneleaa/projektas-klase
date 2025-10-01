@@ -2,7 +2,7 @@
 #include <chrono>
 #include "studentas.h"
 
-using std::cout;   // taisyta: reikia su std::
+using std::cout;   
 using std::endl;
 using std::vector;
 using std::string;
