@@ -37,4 +37,93 @@ double skaiciuotiMediana(vector<int> v) {
 double skaiciuotiGalutini(const vector<int>& paz, int egz) {
     return skaiciuotiVidurki(paz) * 0.4 + egz * 0.6;
 }
+Studentas generuotiStudenta(int id) {
+    Studentas s;
+    s.vardas = "Vardas" + std::to_string(id);
+    s.pavarde = "Pavarde" + std::to_string(id);
+
+    int nd = 5;
+    for (int i = 0; i < nd; i++) {
+        s.pazymiai.push_back(1 + rand() % 10);
+    }
+
+    s.egzaminas = 1 + rand() % 10;
+    s.galutinis = skaiciuotiGalutini(s.pazymiai, s.egzaminas);
+    return s;
+}
+
+void generuotiFaila(const string& failoVardas, int kiek) {
+    ofstream out(failoVardas);
+    if (!out) {
+        cerr << "Nepavyko sukurti failo: " << failoVardas << endl;
+        return;
+    }
+
+    out << "Vardas Pavarde ND1 ND2 ND3 ND4 ND5 Egzaminas\n";
+    for (int i = 1; i <= kiek; i++) {
+        Studentas s = generuotiStudenta(i);
+        out << s.vardas << " " << s.pavarde << " ";
+        for (int paz : s.pazymiai) out << paz << " ";
+        out << s.egzaminas << "\n";
+    }
+}
+
+vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
+    vector<Studentas> grupe;
+    ifstream in(failoVardas);
+    if (!in) {
+        cerr << "Nepavyko atidaryti failo: " << failoVardas << endl;
+        return grupe;
+    }
+
+    string eilute;
+    getline(in, eilute);
+
+    while (getline(in, eilute)) {
+        if (eilute.empty()) continue;
+        istringstream iss(eilute);
+        Studentas s;
+        iss >> s.vardas >> s.pavarde;
+
+        vector<int> paz;
+        int pazymys;
+        while (iss >> pazymys) paz.push_back(pazymys);
+
+        if (!paz.empty()) {
+            s.egzaminas = paz.back();
+            paz.pop_back();
+            s.pazymiai = paz;
+            s.galutinis = skaiciuotiGalutini(s.pazymiai, s.egzaminas);
+            grupe.push_back(s);
+        }
+    }
+    return grupe;
+}
+
+void padalintiStudentus(const vector<Studentas>& grupe,
+                        const string& failasVargsiukai,
+                        const string& failasKietiakiai) {
+    ofstream outV(failasVargsiukai);
+    ofstream outK(failasKietiakiai);
+
+    outV << setw(15) << left << "Vardas"
+         << setw(15) << left << "Pavarde"
+         << setw(10) << right << "Galutinis\n";
+
+    outK << setw(15) << left << "Vardas"
+         << setw(15) << left << "Pavarde"
+         << setw(10) << right << "Galutinis\n";
+
+    for (const auto& s : grupe) {
+        if (s.galutinis < 5.0) {
+            outV << setw(15) << left << s.vardas
+                 << setw(15) << left << s.pavarde
+                 << setw(10) << fixed << setprecision(2) << s.galutinis << "\n";
+        } else {
+            outK << setw(15) << left << s.vardas
+                 << setw(15) << left << s.pavarde
+                 << setw(10) << fixed << setprecision(2) << s.galutinis << "\n";
+        }
+    }
+}
 
