@@ -6,16 +6,16 @@
 #include <cstdlib>
 #include <ctime>
 
-using ofstream;
-using ifstream;
-using istringstream;
-using cerr;
-using endl;
-using setw;
-using left;
-using right;
-using fixed;
-using setprecision;
+using std::ofstream;
+using std::ifstream;
+using std::istringstream;
+using std::cerr;
+using std::endl;
+using std::setw;
+using std::left;
+using std::right;
+using std::fixed;
+using std::setprecision;
 
 double skaiciuotiVidurki(const vector<int>& v) {
     if (v.empty()) return 0.0;
