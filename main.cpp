@@ -13,7 +13,7 @@ int main() {
     vector<int> kiekiai = {1000, 10000, 100000, 1000000, 10000000};
 
     for (int kiek : kiekiai) {
-        cout << "\n=== TESTAS: " << kiek << " studentu ===\n";
+        cout << "\n TESTAS: " << kiek << " studentu \n";
         
         auto start = std::chrono::high_resolution_clock::now();
         string failas = "studentai" + std::to_string(kiek) + ".txt";
