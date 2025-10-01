@@ -67,7 +67,15 @@ void generuotiFaila(const string& failoVardas, int kiek) {
         out << s.egzaminas << "\n";
     }
 }
-
+void rikiuotiStudentus(vector<Studentas>& grupe, const string& pagal) {
+    if (pagal == "vardas") {
+        sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.vardas < b.vardas; });
+    } else if (pagal == "pavarde") {
+        sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.pavarde < b.pavarde; });
+    } else if (pagal == "galutinis") {
+        sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.galutinis < b.galutinis; });
+    }
+}
 vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
     vector<Studentas> grupe;
     ifstream in(failoVardas);
