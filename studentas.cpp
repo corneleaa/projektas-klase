@@ -76,6 +76,25 @@ void rikiuotiStudentus(vector<Studentas>& grupe, const string& pagal) {
         sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.galutinis < b.galutinis; });
     }
 }
+void padalintiStudentusTik(vector<Studentas>& grupe,
+                           vector<Studentas>& vargs,
+                           vector<Studentas>& kiet) {
+    for (auto& s : grupe) {
+        if (s.galutinis < 5.0) vargs.push_back(s);
+        else kiet.push_back(s);
+    }
+}
+void isvestiStudentus(const vector<Studentas>& grupe, const string& failoVardas) {
+    ofstream out(failoVardas);
+    out << setw(15) << left << "Vardas"
+        << setw(15) << left << "Pavarde"
+        << setw(10) << right << "Galutinis\n";
+    for (auto& s : grupe) {
+        out << setw(15) << left << s.vardas
+            << setw(15) << left << s.pavarde
+            << setw(10) << fixed << setprecision(2) << s.galutinis << "\n";
+    }
+}
 vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
     vector<Studentas> grupe;
     ifstream in(failoVardas);
@@ -107,30 +126,33 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
     }
     return grupe;
 }
+void processStreaming(const string& failoVardas,
+                      const string& failasVargs,
+                      const string& failasKiet) {
+    ifstream in(failoVardas);
+    ofstream outV(failasVargs);
+    ofstream outK(failasKiet);
 
-void padalintiStudentus(const vector<Studentas>& grupe,
-                        const string& failasVargsiukai,
-                        const string& failasKietiakiai) {
-    ofstream outV(failasVargsiukai);
-    ofstream outK(failasKietiakiai);
+    string eilute;
+    getline(in, eilute); // praleidziam antraste
+    while (getline(in, eilute)) {
+        istringstream iss(eilute);
+        Studentas s;
+        iss >> s.vardas >> s.pavarde;
+        vector<int> paz;
+        int x;
+        while (iss >> x) paz.push_back(x);
+        if (!paz.empty()) {
+            s.egzaminas = paz.back();
+            paz.pop_back();
+            s.pazymiai = paz;
+            s.galutinis = skaiciuotiGalutini(s.pazymiai, s.egzaminas);
+        }
 
-    outV << setw(15) << left << "Vardas"
-         << setw(15) << left << "Pavarde"
-         << setw(10) << right << "Galutinis\n";
-
-    outK << setw(15) << left << "Vardas"
-         << setw(15) << left << "Pavarde"
-         << setw(10) << right << "Galutinis\n";
-
-    for (const auto& s : grupe) {
         if (s.galutinis < 5.0) {
-            outV << setw(15) << left << s.vardas
-                 << setw(15) << left << s.pavarde
-                 << setw(10) << fixed << setprecision(2) << s.galutinis << "\n";
+            outV << s.vardas << " " << s.pavarde << " " << s.galutinis << "\n";
         } else {
-            outK << setw(15) << left << s.vardas
-                 << setw(15) << left << s.pavarde
-                 << setw(10) << fixed << setprecision(2) << s.galutinis << "\n";
+            outK << s.vardas << " " << s.pavarde << " " << s.galutinis << "\n";
         }
     }
 }
