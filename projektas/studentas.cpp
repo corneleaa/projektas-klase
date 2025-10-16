@@ -20,6 +20,8 @@ double skaiciuotiMediana(vector<int> v) {
 double skaiciuotiGalutini(const vector<int>& paz, int egz) {
     return skaiciuotiVidurki(paz) * 0.4 + egz * 0.6;
 }
+
+// ✅ Nauja dalis – studento generavimas programiškai
 Studentas generuotiStudenta(int id) {
     Studentas s;
     s.vardas = "Vardas" + std::to_string(id);
@@ -50,23 +52,24 @@ void generuotiFaila(const string& failoVardas, int kiek) {
         out << s.egzaminas << "\n";
     }
 }
+
 void rikiuotiStudentus(vector<Studentas>& grupe, const string& pagal) {
     if (pagal == "vardas") {
-        sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.vardas < b.vardas; });
+        std::sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.vardas < b.vardas; });
     } else if (pagal == "pavarde") {
-        sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.pavarde < b.pavarde; });
+        std::sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.pavarde < b.pavarde; });
     } else if (pagal == "galutinis") {
-        sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.galutinis < b.galutinis; });
+        std::sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.galutinis < b.galutinis; });
     }
 }
-void padalintiStudentusTik(vector<Studentas>& grupe,
-                           vector<Studentas>& vargs,
-                           vector<Studentas>& kiet) {
+
+void padalintiStudentusTik(vector<Studentas>& grupe, vector<Studentas>& vargs, vector<Studentas>& kiet) {
     for (auto& s : grupe) {
         if (s.galutinis < 5.0) vargs.push_back(s);
         else kiet.push_back(s);
     }
 }
+
 void isvestiStudentus(const vector<Studentas>& grupe, const string& failoVardas) {
     ofstream out(failoVardas);
     out << setw(15) << left << "Vardas"
@@ -78,6 +81,7 @@ void isvestiStudentus(const vector<Studentas>& grupe, const string& failoVardas)
             << setw(10) << fixed << setprecision(2) << s.galutinis << "\n";
     }
 }
+
 vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
     vector<Studentas> grupe;
     ifstream in(failoVardas);
@@ -109,6 +113,8 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
     }
     return grupe;
 }
+
+// ✅ Ši funkcija buvo papildoma – skirsto studentus tiesiogiai į du failus skaitymo metu
 void processStreaming(const string& failoVardas,
                       const string& failasVargs,
                       const string& failasKiet) {
@@ -117,7 +123,7 @@ void processStreaming(const string& failoVardas,
     ofstream outK(failasKiet);
 
     string eilute;
-    getline(in, eilute); // praleidziam antraste
+    getline(in, eilute); // praleidžiama antraštė
     while (getline(in, eilute)) {
         istringstream iss(eilute);
         Studentas s;
@@ -132,12 +138,10 @@ void processStreaming(const string& failoVardas,
             s.galutinis = skaiciuotiGalutini(s.pazymiai, s.egzaminas);
         }
 
-        if (s.galutinis < 5.0) {
+        if (s.galutinis < 5.0)
             outV << s.vardas << " " << s.pavarde << " " << s.galutinis << "\n";
-        } else {
+        else
             outK << s.vardas << " " << s.pavarde << " " << s.galutinis << "\n";
-        }
     }
 }
-
 
