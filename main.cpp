@@ -1,6 +1,12 @@
 #include "studentas.h"
 int main() {
     srand(time(nullptr));
+    cout << "Ar norite (1) generuoti nauja faila ar (2) naudoti esama? Įveskite 1 arba 2: ";
+        int pasirinkimas;
+        std::cin >> pasirinkimas;
+
+        std::string failas;
+        int kiek = 0;
 
     vector<int> kiekiai = {1000, 10000, 100000, 1000000, 10000000};
 
