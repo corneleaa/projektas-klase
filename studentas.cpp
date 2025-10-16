@@ -117,7 +117,7 @@ void processStreaming(const string& failoVardas,
     ofstream outK(failasKiet);
 
     string eilute;
-    getline(in, eilute); // praleidziam antraste
+    getline(in, eilute); 
     while (getline(in, eilute)) {
         istringstream iss(eilute);
         Studentas s;
