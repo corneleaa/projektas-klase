@@ -4,9 +4,29 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
+
 
 using std::string;
 using std::vector;
+using std::ofstream;
+using std::ifstream;
+using std::istringstream;
+using std::cerr;
+using std::endl;
+using std::setw;
+using std::left;
+using std::right;
+using std::fixed;
+using std::setprecision;
+using std::cout;
+
 
 struct Studentas {
     string vardas;
