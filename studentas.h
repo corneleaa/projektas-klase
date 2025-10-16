@@ -26,6 +26,8 @@ using std::right;
 using std::fixed;
 using std::setprecision;
 using std::cout;
+using std::cin;
+using std::srand;
 
 
 struct Studentas {
