@@ -1,12 +1,4 @@
-#include <iostream>
-#include <chrono>
 #include "studentas.h"
-
-using std::cout;
-using std::endl;
-using std::vector;
-using std::string;
-
 int main() {
     srand(time(nullptr));
 
