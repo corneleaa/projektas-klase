@@ -1,21 +1,4 @@
 #include "studentas.h"
-#include <fstream>
-#include <sstream>
-#include <iomanip>
-#include <algorithm>
-#include <cstdlib>
-#include <ctime>
-
-using std::ofstream;
-using std::ifstream;
-using std::istringstream;
-using std::cerr;
-using std::endl;
-using std::setw;
-using std::left;
-using std::right;
-using std::fixed;
-using std::setprecision;
 
 double skaiciuotiVidurki(const vector<int>& v) {
     if (v.empty()) return 0.0;
