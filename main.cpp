@@ -7,6 +7,29 @@ int main() {
 
         std::string failas;
         int kiek = 0;
+    if (pasirinkimas == 1) {
+            cout << "Įveskite failo pavadinimą (pvz. studentai1000.txt): ";
+            cin >> failas;
+            cout << "Kiek studentų generuoti? ";
+            std::cin >> kiek;
+
+            auto start = std::chrono::high_resolution_clock::now(); 
+            generuotiFaila(failas, kiek);
+            auto end = std::chrono::high_resolution_clock::now();
+
+            std::cout << "Failas sugeneruotas per "
+                      << std::chrono::duration<double>(end - start).count()
+                      << " s.\n";
+        }
+        else if (pasirinkimas == 2) {
+            std::cout << "Įveskite egzistuojančio failo pavadinimą: ";
+            std::cin >> failas;
+        }
+        else {
+            cout << "Neteisingas pasirinkimas!\n";
+            return 0;
+        }
+
 
     vector<int> kiekiai = {1000, 10000, 100000, 1000000, 10000000};
 
