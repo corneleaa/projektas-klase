@@ -7,7 +7,7 @@ int main() {
     std::string failas;
     int kiek = 0;
     if (pasirinkimas == 1) {
-        cout << "Įveskite failo pavadinimą (pvz. studentai1000.txt): ";
+        cout << "Įveskite failo pavadinimą";
         cin >> failas;
         cout << "Kiek studentu generuoti? ";
         std::cin >> kiek;
