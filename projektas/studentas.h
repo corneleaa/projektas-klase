@@ -1,7 +1,6 @@
 #ifndef STUDENTAS_H
 #define STUDENTAS_H
 
-// ✅ Visos bibliotekos sujungtos į vieną header'į
 #include <iostream>
 #include <string>
 #include <vector>
@@ -13,7 +12,6 @@
 #include <cstdlib>
 #include <ctime>
 
-// ✅ Vietoj "using namespace std;" – tik konkretūs vardai
 using std::string;
 using std::vector;
 using std::cout;
@@ -28,7 +26,6 @@ using std::right;
 using std::fixed;
 using std::setprecision;
 
-// ✅ Studentas struktūra
 struct Studentas {
     string vardas;
     string pavarde;
@@ -37,7 +34,6 @@ struct Studentas {
     double galutinis{};
 };
 
-// ✅ Funkcijų prototipai (viskas aprašyta studentas.cpp faile)
 double skaiciuotiVidurki(const vector<int>& v);
 double skaiciuotiMediana(vector<int> v);
 double skaiciuotiGalutini(const vector<int>& paz, int egz);
