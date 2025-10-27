@@ -21,7 +21,6 @@ double skaiciuotiGalutini(const vector<int>& paz, int egz) {
     return skaiciuotiVidurki(paz) * 0.4 + egz * 0.6;
 }
 
-// ✅ Nauja dalis – studento generavimas programiškai
 Studentas generuotiStudenta(int id) {
     Studentas s;
     s.vardas = "Vardas" + std::to_string(id);
@@ -55,14 +54,36 @@ void generuotiFaila(const string& failoVardas, int kiek) {
 
 void rikiuotiStudentus(vector<Studentas>& grupe, const string& pagal) {
     if (pagal == "vardas") {
-        std::sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.vardas < b.vardas; });
-    } else if (pagal == "pavarde") {
-        std::sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.pavarde < b.pavarde; });
-    } else if (pagal == "galutinis") {
-        std::sort(grupe.begin(), grupe.end(), [](auto& a, auto& b) { return a.galutinis < b.galutinis; });
+        std::sort(grupe.begin(), grupe.end(),
+            [](const Studentas& a, const Studentas& b) {
+                return a.vardas < b.vardas;
+            });
+    }
+    else if (pagal == "pavarde") {
+        std::sort(grupe.begin(), grupe.end(),
+            [](const Studentas& a, const Studentas& b) {
+                return a.pavarde < b.pavarde;
+            });
+    }
+    else if (pagal == "galutinis") {
+        std::sort(grupe.begin(), grupe.end(),
+            [](const Studentas& a, const Studentas& b) {
+                return a.galutinis > b.galutinis; // nuo didžiausio
+            });
+    }
+    else if (pagal == "vidurkis") {
+        std::sort(grupe.begin(), grupe.end(),
+            [](const Studentas& a, const Studentas& b) {
+                return skaiciuotiVidurki(a.pazymiai) > skaiciuotiVidurki(b.pazymiai);
+            });
+    }
+    else if (pagal == "mediana") {
+        std::sort(grupe.begin(), grupe.end(),
+            [](const Studentas& a, const Studentas& b) {
+                return skaiciuotiMediana(a.pazymiai) > skaiciuotiMediana(b.pazymiai);
+            });
     }
 }
-
 void padalintiStudentusTik(vector<Studentas>& grupe, vector<Studentas>& vargs, vector<Studentas>& kiet) {
     for (auto& s : grupe) {
         if (s.galutinis < 5.0) vargs.push_back(s);
@@ -113,8 +134,6 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
     }
     return grupe;
 }
-
-// ✅ Ši funkcija buvo papildoma – skirsto studentus tiesiogiai į du failus skaitymo metu
 void processStreaming(const string& failoVardas,
                       const string& failasVargs,
                       const string& failasKiet) {
