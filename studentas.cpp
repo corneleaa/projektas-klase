@@ -124,9 +124,9 @@ void isvestiStudentus(const vector<Studentas>& grupe, const string& failoVardas)
             << setw(10) << fixed << setprecision(2) << s.galutinis << "\n";
     }
 }
-
-vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
-    vector<Studentas> grupe;
+template <typename Container>
+Container nuskaitytiIsFailoT(const string& failoVardas) {
+    Container grupe;
     ifstream in(failoVardas);
     if (!in) {
         cerr << "Nepavyko atidaryti failo: " << failoVardas << endl;
@@ -138,51 +138,61 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
 
     while (getline(in, eilute)) {
         if (eilute.empty()) continue;
+
+        if (!eilute.empty() && eilute.back() == '\r')
+            eilute.pop_back();
+
+        std::replace(eilute.begin(), eilute.end(), '\t', ' ');
+
         istringstream iss(eilute);
         Studentas s;
         iss >> s.vardas >> s.pavarde;
 
         vector<int> paz;
         int pazymys;
-        while (iss >> pazymys) paz.push_back(pazymys);
+        while (iss >> pazymys)
+            paz.push_back(pazymys);
 
         if (!paz.empty()) {
             s.egzaminas = paz.back();
             paz.pop_back();
             s.pazymiai = paz;
             s.galutinis = skaiciuotiGalutini(s.pazymiai, s.egzaminas);
-            grupe.push_back(s);
+            grupe.emplace_back(std::move(s));
         }
     }
+
+    cout << " Nuskaityta studentų: " << grupe.size() << endl;
     return grupe;
 }
-void processStreaming(const string& failoVardas,
-                      const string& failasVargs,
-                      const string& failasKiet) {
-    ifstream in(failoVardas);
-    ofstream outV(failasVargs);
-    ofstream outK(failasKiet);
 
-    string eilute;
-    getline(in, eilute); // praleidžiama antraštė
-    while (getline(in, eilute)) {
-        istringstream iss(eilute);
-        Studentas s;
-        iss >> s.vardas >> s.pavarde;
-        vector<int> paz;
-        int x;
-        while (iss >> x) paz.push_back(x);
-        if (!paz.empty()) {
-            s.egzaminas = paz.back();
-            paz.pop_back();
-            s.pazymiai = paz;
-            s.galutinis = skaiciuotiGalutini(s.pazymiai, s.egzaminas);
-        }
-
-        if (s.galutinis < 5.0)
-            outV << s.vardas << " " << s.pavarde << " " << s.galutinis << "\n";
-        else
-            outK << s.vardas << " " << s.pavarde << " " << s.galutinis << "\n";
+template <typename Container>
+void padalintiStudentusTikT(const Container& grupe, Container& vargs, Container& kiet) {
+    for (const auto& s : grupe) {
+        if (s.galutinis < 5.0) vargs.emplace_back(s);
+        else kiet.emplace_back(s);
     }
 }
+
+template <typename Container>
+void isvestiStudentusT(const Container& grupe, const string& failoVardas) {
+    ofstream out(failoVardas);
+    if (!out) {
+        cerr << "Nepavyko sukurti išvesties failo: " << failoVardas << endl;
+        return;
+    }
+    out << setw(15) << left << "Vardas"
+        << setw(15) << left << "Pavarde"
+        << setw(10) << right << "Galutinis\n";
+    for (const auto& s : grupe)
+        out << setw(15) << left << s.vardas
+            << setw(15) << left << s.pavarde
+            << setw(10) << fixed << setprecision(2) << s.galutinis << "\n";
+}
+template vector<Studentas> nuskaitytiIsFailoT<vector<Studentas>>(const string&);
+template list<Studentas> nuskaitytiIsFailoT<list<Studentas>>(const string&);
+template void padalintiStudentusTikT<vector<Studentas>>(const vector<Studentas>&, vector<Studentas>&, vector<Studentas>&);
+template void padalintiStudentusTikT<list<Studentas>>(const list<Studentas>&, list<Studentas>&, list<Studentas>&);
+template void isvestiStudentusT<vector<Studentas>>(const vector<Studentas>&, const string&);
+template void isvestiStudentusT<list<Studentas>>(const list<Studentas>&, const string&);
 
