@@ -57,7 +57,6 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
         cerr << "Nepavyko atidaryti failo: " << failoVardas << endl;
         return grupe;
     }
-
     string eilute;
     getline(in, eilute);
 
@@ -94,34 +93,18 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
 void rikiuotiStudentus(vector<Studentas>& grupe, const string& pagal) {
     if (pagal == "vardas") {
         std::sort(grupe.begin(), grupe.end(),
-            [](const Studentas& a, const Studentas& b) {
+            [](auto& a, auto& b) {
                 return a.vardas < b.vardas;
             });
     }
     else if (pagal == "pavarde") {
         std::sort(grupe.begin(), grupe.end(),
-            [](const Studentas& a, const Studentas& b) {
+            [](auto& a, auto& b) {
                 return a.pavarde < b.pavarde;
             });
     }
-    else if (pagal == "galutinis") {
-        std::sort(grupe.begin(), grupe.end(),
-            [](const Studentas& a, const Studentas& b) {
-                return a.galutinis > b.galutinis; // nuo didžiausio
-            });
-    }
-    else if (pagal == "vidurkis") {
-        std::sort(grupe.begin(), grupe.end(),
-            [](const Studentas& a, const Studentas& b) {
-                return skaiciuotiVidurki(a.pazymiai) > skaiciuotiVidurki(b.pazymiai);
-            });
-    }
-    else if (pagal == "mediana") {
-        std::sort(grupe.begin(), grupe.end(),
-            [](const Studentas& a, const Studentas& b) {
-                return skaiciuotiMediana(a.pazymiai) > skaiciuotiMediana(b.pazymiai);
-            });
-    }
+    else
+        std::sort(grupe.begin(), grupe.end(), [](auto& a, auto& b){ return a.galutinis < b.galutinis; });
 }
 void padalintiStudentusTik(vector<Studentas>& grupe, vector<Studentas>& vargs, vector<Studentas>& kiet) {
     for (auto& s : grupe) {
