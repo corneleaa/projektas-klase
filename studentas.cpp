@@ -30,7 +30,6 @@ Studentas generuotiStudenta(int id) {
     for (int i = 0; i < nd; i++) {
         s.pazymiai.push_back(1 + rand() % 10);
     }
-
     s.egzaminas = 1 + rand() % 10;
     s.galutinis = skaiciuotiGalutini(s.pazymiai, s.egzaminas);
     return s;
@@ -50,6 +49,46 @@ void generuotiFaila(const string& failoVardas, int kiek) {
         for (int paz : s.pazymiai) out << paz << " ";
         out << s.egzaminas << "\n";
     }
+}
+vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
+    vector<Studentas> grupe;
+    ifstream in(failoVardas);
+    if (!in) {
+        cerr << "Nepavyko atidaryti failo: " << failoVardas << endl;
+        return grupe;
+    }
+
+    string eilute;
+    getline(in, eilute);
+
+    while (getline(in, eilute)) {
+        if (eilute.empty()) continue;
+
+        if (!eilute.empty() && eilute.back() == '\r')
+            eilute.pop_back();
+
+        std::replace(eilute.begin(), eilute.end(), '\t', ' ');
+
+        istringstream iss(eilute);
+        Studentas s;
+        iss >> s.vardas >> s.pavarde;
+
+        vector<int> paz;
+        int pazymys;
+        while (iss >> pazymys)
+            paz.push_back(pazymys);
+
+        if (!paz.empty()) {
+            s.egzaminas = paz.back();
+            paz.pop_back();
+            s.pazymiai = paz;
+            s.galutinis = skaiciuotiGalutini(s.pazymiai, s.egzaminas);
+            grupe.push_back(s);
+        }
+    }
+
+    cout << " Nuskaityta studentų: " << grupe.size() << endl;
+    return grupe;
 }
 
 void rikiuotiStudentus(vector<Studentas>& grupe, const string& pagal) {
