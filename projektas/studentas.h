@@ -29,9 +29,6 @@ using std::right;
 using std::fixed;
 using std::setprecision;
 
-// -------------------------
-// STRUKTŪRA
-// -------------------------
 struct Studentas {
     string vardas;
     string pavarde;
@@ -40,9 +37,6 @@ struct Studentas {
     double galutinis{};
 };
 
-// -------------------------
-// FUNKCIJŲ PROTOTIPAI
-// -------------------------
 double skaiciuotiVidurki(const vector<int>& v);
 double skaiciuotiMediana(vector<int> v);
 double skaiciuotiGalutini(const vector<int>& paz, int egz);
