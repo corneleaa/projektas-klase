@@ -102,3 +102,4 @@ Kur \( t_i \) — kiekvieno bandymo rezultatas sekundėmis.
 
 
 
+
