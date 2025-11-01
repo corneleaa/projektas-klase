@@ -1,4 +1,5 @@
 #include "studentas.h"
+
 double skaiciuotiVidurki(const vector<int>& v) {
     if (v.empty()) return 0.0;
     double suma = 0;
@@ -15,11 +16,9 @@ double skaiciuotiMediana(vector<int> v) {
     else
         return v[n/2];
 }
-
 double skaiciuotiGalutini(const vector<int>& paz, int egz) {
     return skaiciuotiVidurki(paz) * 0.4 + egz * 0.6;
 }
-
 double skaiciuotiGalutiniPagalTipa(const vector<int>& paz, int egz, int tipas) {
     double vid = skaiciuotiVidurki(paz);
     double med = skaiciuotiMediana(paz);
@@ -51,6 +50,7 @@ void generuotiFaila(const string& failoVardas, int kiek) {
         out << s.egzaminas << "\n";
     }
 }
+
 vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
     vector<Studentas> grupe;
     ifstream in(failoVardas);
@@ -58,10 +58,8 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
         cerr << "Nepavyko atidaryti failo: " << failoVardas << endl;
         return grupe;
     }
-
     string eilute;
     getline(in, eilute);
-
     while (getline(in, eilute)) {
         if (eilute.empty()) continue;
 
@@ -78,7 +76,6 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
         int pazymys;
         while (iss >> pazymys)
             paz.push_back(pazymys);
-
         if (!paz.empty()) {
             s.egzaminas = paz.back();
             paz.pop_back();
@@ -87,11 +84,9 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
             grupe.push_back(s);
         }
     }
-
     cout << " Nuskaityta studentų: " << grupe.size() << endl;
     return grupe;
 }
-
 void rikiuotiStudentus(vector<Studentas>& grupe, const string& pagal) {
     if (pagal == "vardas")
         std::sort(grupe.begin(), grupe.end(), [](auto& a, auto& b){ return a.vardas < b.vardas; });
@@ -100,14 +95,12 @@ void rikiuotiStudentus(vector<Studentas>& grupe, const string& pagal) {
     else
         std::sort(grupe.begin(), grupe.end(), [](auto& a, auto& b){ return a.galutinis < b.galutinis; });
 }
-
 void padalintiStudentusTik(vector<Studentas>& grupe, vector<Studentas>& vargs, vector<Studentas>& kiet) {
     for (auto& s : grupe) {
         if (s.galutinis < 5.0) vargs.push_back(s);
         else kiet.push_back(s);
     }
 }
-
 void isvestiStudentus(const vector<Studentas>& grupe, const string& failoVardas) {
     ofstream out(failoVardas);
     if (!out) {
@@ -163,7 +156,6 @@ Container nuskaitytiIsFailoT(const string& failoVardas) {
     cout << " Nuskaityta studentų: " << grupe.size() << endl;
     return grupe;
 }
-
 template <typename Container>
 void padalintiStudentusTikT(const Container& grupe, Container& vargs, Container& kiet) {
     for (const auto& s : grupe) {
@@ -171,7 +163,6 @@ void padalintiStudentusTikT(const Container& grupe, Container& vargs, Container&
         else kiet.emplace_back(s);
     }
 }
-
 template <typename Container>
 void isvestiStudentusT(const Container& grupe, const string& failoVardas) {
     ofstream out(failoVardas);
@@ -193,4 +184,3 @@ template void padalintiStudentusTikT<vector<Studentas>>(const vector<Studentas>&
 template void padalintiStudentusTikT<list<Studentas>>(const list<Studentas>&, list<Studentas>&, list<Studentas>&);
 template void isvestiStudentusT<vector<Studentas>>(const vector<Studentas>&, const string&);
 template void isvestiStudentusT<list<Studentas>>(const list<Studentas>&, const string&);
-
