@@ -184,3 +184,53 @@ template void padalintiStudentusTikT<vector<Studentas>>(const vector<Studentas>&
 template void padalintiStudentusTikT<list<Studentas>>(const list<Studentas>&, list<Studentas>&, list<Studentas>&);
 template void isvestiStudentusT<vector<Studentas>>(const vector<Studentas>&, const string&);
 template void isvestiStudentusT<list<Studentas>>(const list<Studentas>&, const string&);
+
+bool yraVargsiukas(const Studentas& s) {
+    return s.galutinis < 5.0;
+}
+void split_strat1_vector(const std::vector<Studentas>& src,
+                         std::vector<Studentas>& vargs,
+                         std::vector<Studentas>& kiet) {
+    vargs.clear(); kiet.clear();
+    std::partition_copy(src.begin(), src.end(),
+                        std::back_inserter(vargs),
+                        std::back_inserter(kiet),
+                        yraVargsiukas);
+}
+
+void split_strat1_list(const std::list<Studentas>& src,
+                       std::list<Studentas>& vargs,
+                       std::list<Studentas>& kiet) {
+    vargs.clear(); kiet.clear();
+    std::partition_copy(src.begin(), src.end(),
+                        std::back_inserter(vargs),
+                        std::back_inserter(kiet),
+                        yraVargsiukas);
+}
+void split_strat2_vector(std::vector<Studentas>& all,
+                         std::vector<Studentas>& vargs) {
+    vargs.clear();
+    auto mid = std::partition(all.begin(), all.end(), yraVargsiukas);
+    std::move(all.begin(), mid, std::back_inserter(vargs));
+    all.erase(all.begin(), mid);
+}
+
+void split_strat2_list(std::list<Studentas>& all,
+                       std::list<Studentas>& vargs) {
+    vargs.clear();
+    for (auto it = all.begin(); it != all.end();) {
+        if (yraVargsiukas(*it)) {
+            auto cur = it++;
+            vargs.splice(vargs.end(), all, cur);
+        } else ++it;
+    }
+}
+void split_strat3_vector(std::vector<Studentas>& all,
+                         std::vector<Studentas>& vargs) {
+    split_strat2_vector(all, vargs);
+}
+
+void split_strat3_list(std::list<Studentas>& all,
+                       std::list<Studentas>& vargs) {
+    split_strat2_list(all, vargs);
+}
