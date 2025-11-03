@@ -157,12 +157,31 @@ void split_strat2_list(std::list<Studentas>& all,
 }
 void split_strat3_vector(std::vector<Studentas>& all,
                          std::vector<Studentas>& vargs) {
-    split_strat2_vector(all, vargs);
-}
+    vargs.clear();
+    vargs.reserve(all.size() / 2);
 
+    std::remove_copy_if(all.begin(), all.end(),
+                        std::back_inserter(vargs),
+                        [](const Studentas& s){ return s.galutinis >= 5.0; });
+
+    auto it = std::remove_if(all.begin(), all.end(),
+                             [](const Studentas& s){ return s.galutinis < 5.0; });
+    all.erase(it, all.end());
+
+    all.shrink_to_fit();
+    vargs.shrink_to_fit();
+}
 void split_strat3_list(std::list<Studentas>& all,
                        std::list<Studentas>& vargs) {
-    split_strat2_list(all, vargs);
+    vargs.clear();
+    for (auto it = all.begin(); it != all.end();) {
+        if (it->galutinis < 5.0) {
+            auto moveIt = it++;
+            vargs.splice(vargs.end(), all, moveIt);
+        } else {
+            ++it;
+        }
+    }
 }
 template <typename Container>
 Container nuskaitytiIsFailoT(const string& failoVardas) {
