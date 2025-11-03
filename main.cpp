@@ -170,11 +170,23 @@ int main() {
              << std::chrono::duration<double>(end_sort - start_sort).count() << " s\n";
 
         auto start_split = std::chrono::high_resolution_clock::now();
-        vector<Studentas> vargs, kiet;
-        padalintiStudentusTik(grupe, vargs, kiet);
+        list<Studentas> vargs, kiet;
+
+        if (strategija == 1) {
+            split_strat1_list(grupe, vargs, kiet);
+        }
+        else if (strategija == 2) {
+            split_strat2_list(grupe, vargs);
+            kiet = std::move(grupe);
+        }
+        else {
+            split_strat3_list(grupe, vargs);
+            kiet = std::move(grupe);
+        }
         auto end_split = std::chrono::high_resolution_clock::now();
-        cout << "Padalinimas į 2 grupes: "
+        cout << "Padalinimas į 2 grupes (strategija " << strategija << "): "
              << std::chrono::duration<double>(end_split - start_split).count() << " s\n";
+
 
         auto start_write = std::chrono::high_resolution_clock::now();
         ofstream outV("vargsiukai.txt");
