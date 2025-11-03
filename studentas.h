@@ -50,6 +50,26 @@ void rikiuotiStudentus(vector<Studentas>& grupe, const string& pagal);
 void padalintiStudentusTik(vector<Studentas>& grupe, vector<Studentas>& vargs, vector<Studentas>& kiet);
 void isvestiStudentus(const vector<Studentas>& grupe, const string& failoVardas);
 
+void split_strat1_vector(const std::vector<Studentas>& src,
+                         std::vector<Studentas>& vargs,
+                         std::vector<Studentas>& kiet);
+
+void split_strat2_vector(std::vector<Studentas>& all,
+                         std::vector<Studentas>& vargs);
+
+void split_strat3_vector(std::vector<Studentas>& all,
+                         std::vector<Studentas>& vargs);
+
+void split_strat1_list(const std::list<Studentas>& src,
+                       std::list<Studentas>& vargs,
+                       std::list<Studentas>& kiet);
+
+void split_strat2_list(std::list<Studentas>& all,
+                       std::list<Studentas>& vargs);
+
+void split_strat3_list(std::list<Studentas>& all,
+                       std::list<Studentas>& vargs);
+
 template <typename Container>
 Container nuskaitytiIsFailoT(const string& failoVardas);
 
