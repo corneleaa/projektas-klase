@@ -1,5 +1,7 @@
 #include "studentas.h"
 #include <filesystem>
+#include <list>
+#include <vector>
 
 int main() {
     srand(time(nullptr));
@@ -63,7 +65,7 @@ int main() {
                 s.galutinis = skaiciuotiGalutiniPagalTipa(s.pazymiai, s.egzaminas, 1);
 
                 grupe.push_back(s);
-                cout << "Objekto adresas atmintyje (saugojamas konteineryje): " << &grupe.back() << endl; // nauja eilutė v0.3
+                cout << "Objekto adresas atmintyje (saugojamas konteineryje): " << &grupe.back() << endl;
             }
             ofstream out("ivedimas_vector.txt");
             out << left << setw(12) << "Vardas"
@@ -156,6 +158,7 @@ int main() {
     if (kon == 1) {
         auto start_read = std::chrono::high_resolution_clock::now();
         vector<Studentas> grupe = nuskaitytiIsFailo(failas);
+        cout << "Bandom atidaryti failą: " << (std::filesystem::current_path() / failas) << endl;
         auto end_read = std::chrono::high_resolution_clock::now();
         cout << "Failo nuskaitymas (vector): "
              << std::chrono::duration<double>(end_read - start_read).count() << " s\n";
@@ -170,19 +173,20 @@ int main() {
              << std::chrono::duration<double>(end_sort - start_sort).count() << " s\n";
 
         auto start_split = std::chrono::high_resolution_clock::now();
-        list<Studentas> vargs, kiet;
+        vector<Studentas> vargs, kiet;
 
         if (strategija == 1) {
-            split_strat1_list(grupe, vargs, kiet);
+            split_strat1_vector(grupe, vargs, kiet);
         }
         else if (strategija == 2) {
-            split_strat2_list(grupe, vargs);
+            split_strat2_vector(grupe, vargs);
             kiet = std::move(grupe);
         }
         else {
-            split_strat3_list(grupe, vargs);
+            split_strat3_vector(grupe, vargs);
             kiet = std::move(grupe);
         }
+
         auto end_split = std::chrono::high_resolution_clock::now();
         cout << "Padalinimas į 2 grupes (strategija " << strategija << "): "
              << std::chrono::duration<double>(end_split - start_split).count() << " s\n";
@@ -234,17 +238,17 @@ int main() {
              << std::chrono::duration<double>(end_sort - start_sort).count() << " s\n";
 
         auto start_split = std::chrono::high_resolution_clock::now();
-        vector<Studentas> vargs, kiet;
+        list<Studentas> vargs, kiet;
 
         if (strategija == 1) {
-            split_strat1_vector(grupe, vargs, kiet);
+            split_strat1_list(grupe, vargs, kiet);
         }
         else if (strategija == 2) {
-            split_strat2_vector(grupe, vargs);
+            split_strat2_list(grupe, vargs);
             kiet = std::move(grupe);
         }
         else {
-            split_strat3_vector(grupe, vargs);
+            split_strat3_list(grupe, vargs);
             kiet = std::move(grupe);
         }
 
