@@ -65,7 +65,6 @@ vector<Studentas> nuskaitytiIsFailo(const string& failoVardas) {
 
         if (!eilute.empty() && eilute.back() == '\r')
             eilute.pop_back();
-
         std::replace(eilute.begin(), eilute.end(), '\t', ' ');
 
         istringstream iss(eilute);
@@ -159,7 +158,6 @@ void split_strat3_vector(std::vector<Studentas>& all,
                          std::vector<Studentas>& vargs) {
     vargs.clear();
     vargs.reserve(all.size() / 2);
-
     std::remove_copy_if(all.begin(), all.end(),
                         std::back_inserter(vargs),
                         [](const Studentas& s){ return s.galutinis >= 5.0; });
@@ -171,6 +169,20 @@ void split_strat3_vector(std::vector<Studentas>& all,
     all.shrink_to_fit();
     vargs.shrink_to_fit();
 }
+void split_strat3_vector_stable(std::vector<Studentas>& all,
+                                std::vector<Studentas>& vargs) {
+    vargs.clear();
+    vargs.reserve(all.size() / 2);
+
+    auto mid = std::stable_partition(all.begin(), all.end(),
+                                     [](const Studentas& s){ return s.galutinis < 5.0; });
+
+    vargs.insert(vargs.end(),
+                 std::make_move_iterator(all.begin()),
+                 std::make_move_iterator(mid));
+
+    all.erase(all.begin(), mid);
+}
 void split_strat3_list(std::list<Studentas>& all,
                        std::list<Studentas>& vargs) {
     vargs.clear();
@@ -178,9 +190,7 @@ void split_strat3_list(std::list<Studentas>& all,
         if (it->galutinis < 5.0) {
             auto moveIt = it++;
             vargs.splice(vargs.end(), all, moveIt);
-        } else {
-            ++it;
-        }
+        } else ++it;
     }
 }
 template <typename Container>
