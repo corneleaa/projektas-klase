@@ -158,10 +158,7 @@ int main() {
     if (kon == 1) {
         auto start_read = std::chrono::high_resolution_clock::now();
         vector<Studentas> grupe = nuskaitytiIsFailo(failas);
-        cout << "Bandom atidaryti failą: " << (std::filesystem::current_path() / failas) << endl;
         auto end_read = std::chrono::high_resolution_clock::now();
-        cout << "Failo nuskaitymas (vector): "
-             << std::chrono::duration<double>(end_read - start_read).count() << " s\n";
 
         for (auto &s : grupe)
             s.galutinis = skaiciuotiGalutiniPagalTipa(s.pazymiai, s.egzaminas, tipas);
@@ -169,15 +166,13 @@ int main() {
         auto start_sort = std::chrono::high_resolution_clock::now();
         rikiuotiStudentus(grupe, pagal);
         auto end_sort = std::chrono::high_resolution_clock::now();
-        cout << "Rikiavimas: "
-             << std::chrono::duration<double>(end_sort - start_sort).count() << " s\n";
 
         auto start_split = std::chrono::high_resolution_clock::now();
         vector<Studentas> vargs, kiet;
 
-        if (strategija == 1) {
+        if (strategija == 1)
             split_strat1_vector(grupe, vargs, kiet);
-        }
+    
         else if (strategija == 2) {
             split_strat2_vector(grupe, vargs);
             kiet = std::move(grupe);
@@ -188,11 +183,10 @@ int main() {
         }
 
         auto end_split = std::chrono::high_resolution_clock::now();
-        cout << "Padalinimas į 2 grupes (strategija " << strategija << "): "
-             << std::chrono::duration<double>(end_split - start_split).count() << " s\n";
-
+      
 
         auto start_write = std::chrono::high_resolution_clock::now();
+        std::filesystem::create_directory("results");
         ofstream outV("vargsiukai.txt");
         ofstream outK("kietuoliai.txt");
 
@@ -213,8 +207,26 @@ int main() {
         spausdinti(outK, kiet);
 
         auto end_write = std::chrono::high_resolution_clock::now();
-        cout << "Įrašymas į failus (vargsiukai.txt ir kietuoliai.txt): "
-             << std::chrono::duration<double>(end_write - start_write).count() << " s\n";
+        auto end_total = std::chrono::high_resolution_clock::now();
+
+        double read_t = std::chrono::duration<double>(end_read - start_read).count();
+        double sort_t = std::chrono::duration<double>(end_sort - start_sort).count();
+        double split_t = std::chrono::duration<double>(end_split - start_split).count();
+        double write_t = std::chrono::duration<double>(end_write - start_write).count();
+        double total_t = std::chrono::duration<double>(end_total - start_total).count();
+
+        cout << "\nCSV;"
+             << "vector;"
+             << "strategija_" << strategija << ";"
+             << pagal << ";"
+             << "read=" << read_t << ";"
+             << "sort=" << sort_t << ";"
+             << "split=" << split_t << ";"
+             << "write=" << write_t << ";"
+             << "total=" << total_t << "\n";
+
+        cout << "Rezultatų failai sukurti čia: "
+             << std::filesystem::absolute("results") << endl;
     }
     else {
         auto start_read = std::chrono::high_resolution_clock::now();
@@ -234,8 +246,6 @@ int main() {
         else
             grupe.sort([](auto &a, auto &b) { return a.galutinis < b.galutinis; });
         auto end_sort = std::chrono::high_resolution_clock::now();
-        cout << "Rikiavimas: "
-             << std::chrono::duration<double>(end_sort - start_sort).count() << " s\n";
 
         auto start_split = std::chrono::high_resolution_clock::now();
         list<Studentas> vargs, kiet;
@@ -253,10 +263,9 @@ int main() {
         }
 
         auto end_split = std::chrono::high_resolution_clock::now();
-        cout << "Padalinimas į 2 grupes (strategija " << strategija << "): "
-             << std::chrono::duration<double>(end_split - start_split).count() << " s\n";
 
         auto start_write = std::chrono::high_resolution_clock::now();
+        std::filesystem::create_directory("results");
         ofstream outV("vargsiukai.txt");
         ofstream outK("kietuoliai.txt");
 
@@ -277,14 +286,28 @@ int main() {
         spausdintiList(outK, kiet);
 
         auto end_write = std::chrono::high_resolution_clock::now();
-        cout << "Įrašymas į failus (vargsiukai.txt ir kietuoliai.txt): "
-             << std::chrono::duration<double>(end_write - start_write).count() << " s\n";
+        auto end_total = std::chrono::high_resolution_clock::now();
+        double read_t = std::chrono::duration<double>(end_read - start_read).count();
+        double sort_t = std::chrono::duration<double>(end_sort - start_sort).count();
+        double split_t = std::chrono::duration<double>(end_split - start_split).count();
+        double write_t = std::chrono::duration<double>(end_write - start_write).count();
+        double total_t = std::chrono::duration<double>(end_total - start_total).count();
+
+        cout << "\nCSV;"
+             << "list;"
+             << "strategija_" << strategija << ";"
+             << pagal << ";"
+             << "read=" << read_t << ";"
+             << "sort=" << sort_t << ";"
+             << "split=" << split_t << ";"
+             << "write=" << write_t << ";"
+             << "total=" << total_t << "\n";
+
+        cout << "Rezultatų failai sukurti čia: "
+             << std::filesystem::absolute("results") << endl;
     }
 
-    auto end_total = std::chrono::high_resolution_clock::now();
-    cout << "Bendras veikimo laikas: "
-         << std::chrono::duration<double>(end_total - start_total).count() << " s.\n";
-    cout << "Rezultatų failai sukurti čia: " << std::filesystem::current_path() << endl;
     return 0;
 }
+
 
