@@ -114,7 +114,6 @@ void split_strat2_list(std::list<Studentas>& all,
         } else ++it;
     }
 }
-
 void split_strat3_list(std::list<Studentas>& all,
                        std::list<Studentas>& vargs) {
     split_strat2_list(all, vargs);
