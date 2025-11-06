@@ -13,21 +13,10 @@
 #include <cstdlib>
 #include <ctime>
 
-using std::string;
-using std::vector;
-using std::list;
-using std::cout;
-using std::cin;
-using std::endl;
-using std::ofstream;
-using std::ifstream;
-using std::istringstream;
-using std::cerr;
-using std::setw;
-using std::left;
-using std::right;
-using std::fixed;
-using std::setprecision;
+inline double mediana_ref(const std::vector<int>& v) {
+    std::vector<int> tmp = v;
+    return mediana(tmp);
+}
 
 struct Studentas {
     string vardas;
