@@ -1,21 +1,11 @@
 #include "studentas.h"
+#include <chrono>
+#include <filesystem>
 
-double skaiciuotiVidurki(const vector<int>& v) {
-    if (v.empty()) return 0.0;
-    double suma = 0;
-    for (int x : v) suma += x;
-    return suma / v.size();
-}
+Studentas::Studentas() : egzaminas_(0), galutinis_(0.0) {}
+Studentas::~Studentas() {}
+Studentas::Studentas(std::istream& is) { readStudent(is); }
 
-double skaiciuotiMediana(vector<int> v) {
-    if (v.empty()) return 0.0;
-    std::sort(v.begin(), v.end());
-    size_t n = v.size();
-    if (n % 2 == 0)
-        return (v[n/2 - 1] + v[n/2]) / 2.0;
-    else
-        return v[n/2];
-}
 double skaiciuotiGalutini(const vector<int>& paz, int egz) {
     return skaiciuotiVidurki(paz) * 0.4 + egz * 0.6;
 }
