@@ -51,16 +51,19 @@ Taip pat pastebėta, kad veikimo laikas didėja beveik linijiškai augant įraš
 ---
 
 ## Kompiliatoriaus optimizavimo flagų analizė (`-O1`, `-O2`, `-O3`)
+## Kompiliatoriaus optimizavimo flagų analizė (`-O1`, `-O2`, `-O3`)
 
-Naudota **klasės (class)** versija, 1 000 000 studentų, strategija 3.
+Naudota **klasės (class)** versija, 1 000 000 studentų, strategija 3 (optimizuota).
 
 | Optimizavimo flagas | Bandymas 1 (s) | Bandymas 2 (s) | Bandymas 3 (s) | Vidurkis (s) | EXE dydis (KB) |
 | ------------------- | -------------- | -------------- | -------------- | ------------ | -------------- |
-| -O1                 |                |                |                |              |                |
-| -O2                 |                |                |                |              |                |
-| -O3                 |                |                |                |              |                |
+| -O1                 | 2.700983       | 2.631873       | 2.633102       | **2.6553**   | 85             |
+| -O2                 | 2.663647       | 2.600671       | 2.704792       | **2.6564**   | 85             |
+| -O3                 | 2.661941       | 2.596576       | 2.589643       | **2.6161**   | 85             |
 **Išvada:**
-
+Kompiliatoriaus optimizavimo flagai turėjo matomą, nors ir nedidelį, poveikį veikimo laikui.
+Tarp `-O1` ir `-O3` skirtumas siekia apie **1.5 %**, tačiau `-O3` užtikrino **stabiliausią ir trumpiausią** vykdymo laiką (~2.62 s).
+Kadangi visų trijų versijų `.exe` failų dydis buvo **vienodas (85 KB)**, galima teigti, kad **`-O3` yra optimalus pasirinkimas**, užtikrinantis geriausią našumo ir dydžio santykį be papildomo atminties sąnaudos augimo.
 
 ---
 
