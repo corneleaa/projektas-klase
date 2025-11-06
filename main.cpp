@@ -3,311 +3,155 @@
 #include <list>
 #include <vector>
 
+static string rastiFaila(const string& failas) {
+    namespace fs = std::filesystem;
+    fs::path p = fs::current_path() / failas;
+    if (fs::exists(p)) return p.string();
+    fs::path p1 = fs::current_path().parent_path() / failas;
+    if (fs::exists(p1)) return p1.string();
+    fs::path p2 = fs::current_path().parent_path().parent_path() / failas;
+    if (fs::exists(p2)) return p2.string();
+    return "";
+}
 int main() {
-    srand(time(nullptr));
-
+    srand(static_cast<unsigned>(time(nullptr)));
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     cout << "Pasirinkite režimą:\n"
          << "1) Generuoti naują failą\n"
          << "2) Naudoti esamą failą\n"
          << "3) Įvesti duomenis ranka\n";
-    int rezimas;
-    cin >> rezimas;
-
-    string failas;
-    int kiek = 0;
-
-    if (rezimas == 1) {
-        cout << "Įveskite failo pavadinimą (pvz. studentai1000.txt): ";
-        cin >> failas;
-        if (failas.find('.') == string::npos) failas += ".txt";
-        cout << "Kiek studentų generuoti? ";
-        cin >> kiek;
-
-        auto start_gen = std::chrono::high_resolution_clock::now();
+    int rez; cin >> rez;
+    string failas; int kiek = 0;
+    if (rez == 1) {
+        cout << "Įveskite failo pavadinimą: "; cin >> failas;
+        cout << "Kiek studentų generuoti? "; cin >> kiek;
+        auto t0 = chrono::high_resolution_clock::now();
         generuotiFaila(failas, kiek);
-        auto end_gen = std::chrono::high_resolution_clock::now();
-
-        cout << "Failas sugeneruotas per "
-             << std::chrono::duration<double>(end_gen - start_gen).count()
-             << " s.\n";
-    }
-    else if (rezimas == 2) {
-        cout << "Įveskite esamo failo pavadinimą: ";
-        cin >> failas;
-        if (failas.find('.') == string::npos) failas += ".txt";
-    }
-    else if (rezimas == 3) {
-        cout << "Pasirinkite konteinerį:\n"
-             << "1) std::vector\n"
-             << "2) std::list\n";
-        int kon;
-        cin >> kon;
-        cout << "Kiek studentų norite įvesti? ";
-        cin >> kiek;
-
-        if (kon == 1) {
-            vector<Studentas> grupe;
-            for (int i = 0; i < kiek; i++) {
-                Studentas s;
-                cout << "\nStudentas #" << i + 1 << endl;
-                cout << "Vardas: ";
-                cin >> s.vardas;
-                cout << "Pavarde: ";
-                cin >> s.pavarde;
-                cout << "Įveskite 5 namų darbų pažymius: ";
-                for (int j = 0; j < 5; j++) {
-                    int paz;
-                    cin >> paz;
-                    s.pazymiai.push_back(paz);
-                }
-                cout << "Egzamino pažymys: ";
-                cin >> s.egzaminas;
-                s.galutinis = skaiciuotiGalutiniPagalTipa(s.pazymiai, s.egzaminas, 1);
-
-                grupe.push_back(s);
-                cout << "Objekto adresas atmintyje (saugojamas konteineryje): " << &grupe.back() << endl;
-            }
-            ofstream out("ivedimas_vector.txt");
-            out << left << setw(12) << "Vardas"
-                << setw(12) << "Pavarde"
-                << setw(10) << "Egzaminas"
-                << setw(15) << "Galutinis(vid)" << "\n";
-            for (auto &s : grupe) {
-                out << left << setw(12) << s.vardas
-                    << setw(12) << s.pavarde
-                    << setw(10) << s.egzaminas
-                    << setw(15) << fixed << setprecision(2) << s.galutinis << "\n";
-            }
-            cout << "Rezultatai įrašyti į failą: ivedimas_vector.txt\n";
-        }
-        else if (kon == 2) {
-            list<Studentas> grupe;
-            for (int i = 0; i < kiek; i++) {
-                Studentas s;
-                cout << "\nStudentas #" << i + 1 << endl;
-                cout << "Vardas: ";
-                cin >> s.vardas;
-                cout << "Pavarde: ";
-                cin >> s.pavarde;
-                cout << "Įveskite 5 namų darbų pažymius: ";
-                for (int j = 0; j < 5; j++) {
-                    int paz;
-                    cin >> paz;
-                    s.pazymiai.push_back(paz);
-                }
-                cout << "Egzamino pažymys: ";
-                cin >> s.egzaminas;
-                s.galutinis = skaiciuotiGalutiniPagalTipa(s.pazymiai, s.egzaminas, 1);
-
-                grupe.push_back(s);
-                cout << "Objekto adresas atmintyje (saugojamas konteineryje): " << &grupe.back() << endl; // nauja eilutė v0.3
-            }
-            ofstream out("ivedimas_list.txt");
-            out << left << setw(12) << "Vardas"
-                << setw(12) << "Pavarde"
-                << setw(10) << "Egzaminas"
-                << setw(15) << "Galutinis(vid)" << "\n";
-            for (auto &s : grupe) {
-                out << left << setw(12) << s.vardas
-                    << setw(12) << s.pavarde
-                    << setw(10) << s.egzaminas
-                    << setw(15) << fixed << setprecision(2) << s.galutinis << "\n";
-            }
-            cout << "Rezultatai įrašyti į failą: ivedimas_list.txt\n";
-        }
+        auto t1 = chrono::high_resolution_clock::now();
+        cout << "Failas sugeneruotas per " << chrono::duration<double>(t1 - t0).count() << " s.\n";
         return 0;
+    } else if (rez == 3) {
+        cout << "Kiek studentų norite įvesti? "; cin >> kiek;
+        vector<Studentas> gr;
+        for (int i = 0; i < kiek; ++i) {
+            string v, p; vector<int> nd(5); int egz;
+            cout << "\nStudentas #" << i+1 << "\nVardas: "; cin >> v;
+            cout << "Pavardė: "; cin >> p;
+            cout << "Įveskite 5 ND: "; for (int j=0;j<5;++j) cin >> nd[j];
+            cout << "Egzaminas: "; cin >> egz;
+            Studentas s; s.setVardas(v); s.setPavarde(p); s.setNd(nd); s.setEgzaminas(egz);
+            s.perskaiciuoti(vidurkis);
+            cout << "Objekto adresas: " << &gr.emplace_back(s) << "\n";
+        }
+        ofstream out("ivedimas_rankinis.txt");
+        out << left << setw(12) << "Vardas" << setw(12) << "Pavarde" << setw(10) << "Galutinis" << "\n";
+        for (auto& s : gr) s.spausdinti(out);
+        cout << "Rezultatai įrašyti į ivedimas_rankinis.txt\n";
+        return 0;
+    } else {
+        cout << "Įveskite esamo failo pavadinimą: "; cin >> failas;
+        cout << "Darbinis katalogas: " << filesystem::current_path() << "\n";
+        string tikras = rastiFaila(failas);
+        if (tikras.empty()) { cerr << "Nepavyko rasti failo: " << failas << "\n"; return 1; }
+        cout << " Naudojamas failas: " << tikras << "\n";
+        failas = tikras;
     }
 
     cout << "Pasirinkite galutinio balo skaičiavimo būdą:\n"
          << "1) Pagal vidurkį\n"
          << "2) Pagal medianą\n"
          << "3) Pagal abu\n";
-    int tipas;
-    cin >> tipas;
+    int tipas; cin >> tipas;
+    auto fptr = (tipas == 2) ? mediana_ref : vidurkis;
 
-    cout << "Pasirinkite konteinerį:\n"
-         << "1) std::vector\n"
-         << "2) std::list\n";
-    int kon;
-    cin >> kon;
+    cout << "Pasirinkite konteinerį:\n1) std::vector\n2) std::list\n";
+    int kon; cin >> kon;
 
-    cout << "Rikiuoti pagal:\n"
-         << "1) vardą\n"
-         << "2) pavardę\n"
-         << "3) galutinį\n";
-    int rik;
-    cin >> rik;
-   
+    cout << "Rikiuoti pagal:\n1) vardą\n2) pavardę\n3) galutinį\n";
+    int rik; cin >> rik;
+
     cout << "Pasirinkite strategiją:\n"
-         << "1) Kopijuoti į du naujus konteinerius (A+B)\n"
-         << "2) Tik vargšiukai (ištrinti iš bendro)\n"
-         << "3) Optimizuota greičiausia versija\n";
-    
-    int strategija;
-    cin >> strategija;
+            "1) Kopijuoti į du naujus (A+B)\n"
+            "2) Tik vargšiukai (ištrinti iš bendro)\n"
+            "3) Optimizuota greičiausia\n";
+    int strategija; cin >> strategija;
 
-    string pagal;
-    if (rik == 1) pagal = "vardas";
-    else if (rik == 2) pagal = "pavarde";
-    else pagal = "galutinis";
-
-    cout << "\nDarbinis katalogas: " << std::filesystem::current_path() << "\n";
-
-    auto start_total = std::chrono::high_resolution_clock::now();
+    auto t_total0 = chrono::high_resolution_clock::now();
 
     if (kon == 1) {
-        auto start_read = std::chrono::high_resolution_clock::now();
-        vector<Studentas> grupe = nuskaitytiIsFailo(failas);
-        auto end_read = std::chrono::high_resolution_clock::now();
+        auto t_r0 = chrono::high_resolution_clock::now();
+        vector<Studentas> gr = nuskaitytiIsFailo(failas);
+        auto t_r1 = chrono::high_resolution_clock::now();
 
-        for (auto &s : grupe)
-            s.galutinis = skaiciuotiGalutiniPagalTipa(s.pazymiai, s.egzaminas, tipas);
+        for (auto& s : gr) s.perskaiciuoti(fptr);
 
-        auto start_sort = std::chrono::high_resolution_clock::now();
-        rikiuotiStudentus(grupe, pagal);
-        auto end_sort = std::chrono::high_resolution_clock::now();
+        auto t_s0 = chrono::high_resolution_clock::now();
+        if (rik == 1) sort(gr.begin(), gr.end(), comparePagalVarda);
+        else if (rik == 2) sort(gr.begin(), gr.end(), comparePagalPavarde);
+        else sort(gr.begin(), gr.end(), comparePagalGalutini);
+        auto t_s1 = chrono::high_resolution_clock::now();
 
-        auto start_split = std::chrono::high_resolution_clock::now();
         vector<Studentas> vargs, kiet;
+        auto t_sp0 = chrono::high_resolution_clock::now();
+        if (strategija == 1)       split_strat1_vector(gr, vargs, kiet);
+        else if (strategija == 2) { split_strat2_vector(gr, vargs); kiet = std::move(gr); }
+        else {                      split_strat3_vector(gr, vargs); kiet = std::move(gr); }
+        auto t_sp1 = chrono::high_resolution_clock::now();
 
-        if (strategija == 1)
-            split_strat1_vector(grupe, vargs, kiet);
-    
-        else if (strategija == 2) {
-            split_strat2_vector(grupe, vargs);
-            kiet = std::move(grupe);
-        }
-        else {
-            split_strat3_vector(grupe, vargs);
-            kiet = std::move(grupe);
-        }
+        filesystem::create_directory("results");
+        auto t_w0 = chrono::high_resolution_clock::now();
+        isvestiStudentus(vargs, "results/vargsiukai.txt");
+        isvestiStudentus(kiet,  "results/kietuoliai.txt");
+        auto t_w1 = chrono::high_resolution_clock::now();
 
-        auto end_split = std::chrono::high_resolution_clock::now();
-      
+        auto t_total1 = chrono::high_resolution_clock::now();
 
-        auto start_write = std::chrono::high_resolution_clock::now();
-        std::filesystem::create_directory("results");
-        ofstream outV("vargsiukai.txt");
-        ofstream outK("kietuoliai.txt");
+        cout << fixed << setprecision(6)
+             << "\nLaikai (vector):\n"
+             << "read = "  << chrono::duration<double>(t_r1 - t_r0).count()  << " s\n"
+             << "sort = "  << chrono::duration<double>(t_s1 - t_s0).count()  << " s\n"
+             << "split = " << chrono::duration<double>(t_sp1 - t_sp0).count() << " s\n"
+             << "write = " << chrono::duration<double>(t_w1 - t_w0).count()  << " s\n"
+             << "total = " << chrono::duration<double>(t_total1 - t_total0).count() << " s\n";
+    } else { 
+        auto t_r0 = chrono::high_resolution_clock::now();
+        list<Studentas> gr = nuskaitytiIsFailoT<list<Studentas>>(failas);
+        auto t_r1 = chrono::high_resolution_clock::now();
 
-        auto spausdinti = [&](ofstream &out, const vector<Studentas> &v) {
-            out << left << setw(12) << "Vardas"
-                << setw(12) << "Pavarde"
-                << setw(10) << "Egzaminas"
-                << setw(15) << "Galutinis" << "\n";
-            for (auto &s : v) {
-                out << left << setw(12) << s.vardas
-                    << setw(12) << s.pavarde
-                    << setw(10) << s.egzaminas
-                    << setw(15) << fixed << setprecision(2) << s.galutinis << "\n";
-            }
-        };
+        for (auto& s : gr) s.perskaiciuoti(fptr);
 
-        spausdinti(outV, vargs);
-        spausdinti(outK, kiet);
+        auto t_s0 = chrono::high_resolution_clock::now();
+        if (rik == 1) gr.sort(comparePagalVarda);
+        else if (rik == 2) gr.sort(comparePagalPavarde);
+        else gr.sort(comparePagalGalutini);
+        auto t_s1 = chrono::high_resolution_clock::now();
 
-        auto end_write = std::chrono::high_resolution_clock::now();
-        auto end_total = std::chrono::high_resolution_clock::now();
-
-        double read_t = std::chrono::duration<double>(end_read - start_read).count();
-        double sort_t = std::chrono::duration<double>(end_sort - start_sort).count();
-        double split_t = std::chrono::duration<double>(end_split - start_split).count();
-        double write_t = std::chrono::duration<double>(end_write - start_write).count();
-        double total_t = std::chrono::duration<double>(end_total - start_total).count();
-
-        cout << "\nCSV;"
-             << "vector;"
-             << "strategija_" << strategija << ";"
-             << pagal << ";"
-             << "read=" << read_t << ";"
-             << "sort=" << sort_t << ";"
-             << "split=" << split_t << ";"
-             << "write=" << write_t << ";"
-             << "total=" << total_t << "\n";
-
-        cout << "Rezultatų failai sukurti čia: "
-             << std::filesystem::absolute("results") << endl;
-    }
-    else {
-        auto start_read = std::chrono::high_resolution_clock::now();
-        list<Studentas> grupe = nuskaitytiIsFailoT<list<Studentas>>(failas);
-        auto end_read = std::chrono::high_resolution_clock::now();
-        cout << "Failo nuskaitymas (list): "
-             << std::chrono::duration<double>(end_read - start_read).count() << " s\n";
-
-        for (auto &s : grupe)
-            s.galutinis = skaiciuotiGalutiniPagalTipa(s.pazymiai, s.egzaminas, tipas);
-
-        auto start_sort = std::chrono::high_resolution_clock::now();
-        if (pagal == "vardas")
-            grupe.sort([](auto &a, auto &b) { return a.vardas < b.vardas; });
-        else if (pagal == "pavarde")
-            grupe.sort([](auto &a, auto &b) { return a.pavarde < b.pavarde; });
-        else
-            grupe.sort([](auto &a, auto &b) { return a.galutinis < b.galutinis; });
-        auto end_sort = std::chrono::high_resolution_clock::now();
-
-        auto start_split = std::chrono::high_resolution_clock::now();
         list<Studentas> vargs, kiet;
+        auto t_sp0 = chrono::high_resolution_clock::now();
+        if (strategija == 1)       split_strat1_list(gr, vargs, kiet);
+        else if (strategija == 2) { split_strat2_list(gr, vargs); kiet = std::move(gr); }
+        else {                      split_strat3_list(gr, vargs); kiet = std::move(gr); }
+        auto t_sp1 = chrono::high_resolution_clock::now();
 
-        if (strategija == 1) {
-            split_strat1_list(grupe, vargs, kiet);
-        }
-        else if (strategija == 2) {
-            split_strat2_list(grupe, vargs);
-            kiet = std::move(grupe);
-        }
-        else {
-            split_strat3_list(grupe, vargs);
-            kiet = std::move(grupe);
-        }
+        filesystem::create_directory("results");
+        auto t_w0 = chrono::high_resolution_clock::now();
+        isvestiStudentusT(vargs, "results/vargsiukai.txt");
+        isvestiStudentusT(kiet,  "results/kietuoliai.txt");
+        auto t_w1 = chrono::high_resolution_clock::now();
 
-        auto end_split = std::chrono::high_resolution_clock::now();
+        auto t_total1 = chrono::high_resolution_clock::now();
 
-        auto start_write = std::chrono::high_resolution_clock::now();
-        std::filesystem::create_directory("results");
-        ofstream outV("vargsiukai.txt");
-        ofstream outK("kietuoliai.txt");
-
-        auto spausdintiList = [&](ofstream &out, const list<Studentas> &v) {
-            out << left << setw(12) << "Vardas"
-                << setw(12) << "Pavarde"
-                << setw(10) << "Egzaminas"
-                << setw(15) << "Galutinis" << "\n";
-            for (auto &s : v) {
-                out << left << setw(12) << s.vardas
-                    << setw(12) << s.pavarde
-                    << setw(10) << s.egzaminas
-                    << setw(15) << fixed << setprecision(2) << s.galutinis << "\n";
-            }
-        };
-
-        spausdintiList(outV, vargs);
-        spausdintiList(outK, kiet);
-
-        auto end_write = std::chrono::high_resolution_clock::now();
-        auto end_total = std::chrono::high_resolution_clock::now();
-        double read_t = std::chrono::duration<double>(end_read - start_read).count();
-        double sort_t = std::chrono::duration<double>(end_sort - start_sort).count();
-        double split_t = std::chrono::duration<double>(end_split - start_split).count();
-        double write_t = std::chrono::duration<double>(end_write - start_write).count();
-        double total_t = std::chrono::duration<double>(end_total - start_total).count();
-
-        cout << "\nCSV;"
-             << "list;"
-             << "strategija_" << strategija << ";"
-             << pagal << ";"
-             << "read=" << read_t << ";"
-             << "sort=" << sort_t << ";"
-             << "split=" << split_t << ";"
-             << "write=" << write_t << ";"
-             << "total=" << total_t << "\n";
-
-        cout << "Rezultatų failai sukurti čia: "
-             << std::filesystem::absolute("results") << endl;
+        cout << fixed << setprecision(6)
+             << "\nLaikai (list):\n"
+             << "read = "  << chrono::duration<double>(t_r1 - t_r0).count()  << " s\n"
+             << "sort = "  << chrono::duration<double>(t_s1 - t_s0).count()  << " s\n"
+             << "split = " << chrono::duration<double>(t_sp1 - t_sp0).count() << " s\n"
+             << "write = " << chrono::duration<double>(t_w1 - t_w0).count()  << " s\n"
+             << "total = " << chrono::duration<double>(t_total1 - t_total0).count() << " s\n";
     }
 
+    cout << "\nRezultatai įrašyti į 'results/'.\n";
     return 0;
 }
-
 
