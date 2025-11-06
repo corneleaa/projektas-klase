@@ -70,3 +70,36 @@ Container nuskaitytiIsFailoT(const std::string& failas) {
     std::cout << "Nuskaityta studentų: " << grupe.size() << std::endl;
     return grupe;
 }
+void isvestiStudentus(const std::vector<Studentas>& gr, const std::string& failas);
+template <typename Container>
+void isvestiStudentusT(const Container& gr, const std::string& failas) {
+    std::ofstream out(failas);
+    out << std::left << std::setw(12) << "Vardas"
+        << std::setw(12) << "Pavarde"
+        << std::setw(10) << "Galutinis" << "\n";
+    for (const auto& s : gr) s.spausdinti(out);
+}
+void generuotiFaila(const std::string& failoVardas, int kiek);
+Studentas generuotiStudenta(int id);
+void split_strat1_vector(const std::vector<Studentas>& src,
+                         std::vector<Studentas>& vargs,
+                         std::vector<Studentas>& kiet);
+
+void split_strat2_vector(std::vector<Studentas>& all,
+                         std::vector<Studentas>& vargs);
+
+void split_strat3_vector(std::vector<Studentas>& all,
+                         std::vector<Studentas>& vargs);
+
+void split_strat1_list(const std::list<Studentas>& src,
+                       std::list<Studentas>& vargs,
+                       std::list<Studentas>& kiet);
+
+void split_strat2_list(std::list<Studentas>& all,
+                       std::list<Studentas>& vargs);
+
+void split_strat3_list(std::list<Studentas>& all,
+                       std::list<Studentas>& vargs);
+
+#endif
+
