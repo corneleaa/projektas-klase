@@ -1,0 +1,29 @@
+# =============================
+# Git ignore for Projektas v1.1
+# =============================
+
+# Dideli sugeneruoti duomenų failai
+studentai*.txt
+results/
+*.out
+*.csv
+
+# Xcode build produktai
+*.xcodeproj/*
+DerivedData/
+*/Debug/
+*/Release/
+
+# Objektiniai failai ir binarai
+*.o
+progO1
+progO2
+progO3
+projektas
+
+# Backup, laikini, IDE failai
+.DS_Store
+*.swp
+*.tmp
+*.log
+
