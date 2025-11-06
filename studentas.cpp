@@ -6,24 +6,28 @@ Studentas::Studentas() : egzaminas_(0), galutinis_(0.0) {}
 Studentas::~Studentas() {}
 Studentas::Studentas(std::istream& is) { readStudent(is); }
 
-double skaiciuotiGalutini(const vector<int>& paz, int egz) {
-    return skaiciuotiVidurki(paz) * 0.4 + egz * 0.6;
+std::istream& Studentas::readStudent(std::istream& is) {
+    is >> vardas_ >> pavarde_;
+    nd_.resize(5);
+    for (int i = 0; i < 5; ++i) is >> nd_[i];
+    is >> egzaminas_;
+    // pradinis galutinis pagal vidurkį
+    galutinis_ = skaiciuotiGalutini(vidurkis);
+    return is;
 }
-double skaiciuotiGalutiniPagalTipa(const vector<int>& paz, int egz, int tipas) {
-    double vid = skaiciuotiVidurki(paz);
-    double med = skaiciuotiMediana(paz);
-    if (tipas == 1) return vid * 0.4 + egz * 0.6;
-    if (tipas == 2) return med * 0.4 + egz * 0.6;
-    return ((vid + med) / 2.0) * 0.4 + egz * 0.6;
+
+double Studentas::skaiciuotiGalutini(double (*f)(const std::vector<int>&)) const {
+    return 0.4 * f(nd_) + 0.6 * egzaminas_;
 }
-Studentas generuotiStudenta(int id) {
-    Studentas s;
-    s.vardas = "Vardas" + std::to_string(id);
-    s.pavarde = "Pavarde" + std::to_string(id);
-    for (int i = 0; i < 5; i++) s.pazymiai.push_back(1 + rand() % 10);
-    s.egzaminas = 1 + rand() % 10;
-    s.galutinis = skaiciuotiGalutini(s.pazymiai, s.egzaminas);
-    return s;
+
+void Studentas::perskaiciuoti(double (*f)(const std::vector<int>&)) {
+    galutinis_ = 0.4 * f(nd_) + 0.6 * egzaminas_;
+}
+
+void Studentas::spausdinti(std::ostream& os) const {
+    os << std::left << std::setw(12) << vardas_
+       << std::setw(12) << pavarde_
+       << std::setw(10) << std::fixed << std::setprecision(2) << galutinis_ << "\n";
 }
 
 void generuotiFaila(const string& failoVardas, int kiek) {
