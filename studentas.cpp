@@ -119,40 +119,80 @@ bool yraVargsiukas(const Studentas& s) {
 }
 void split_strat1_vector(const std::vector<Studentas>& src,
                          std::vector<Studentas>& vargs,
-                         std::vector<Studentas>& kiet) {
-    vargs.clear(); kiet.clear();
-    std::partition_copy(src.begin(), src.end(),
-                        std::back_inserter(vargs),
-                        std::back_inserter(kiet),
-                        yraVargsiukas);
-}
+                         std::vector<Studentas>& kiet)
+{
+    vargs.clear();
+    kiet.clear();
 
+    for (const auto& s : src) {
+        if (s.galutinis < 5.0)
+            vargs.push_back(s);
+        else
+            kiet.push_back(s);
+    }
+}
 void split_strat1_list(const std::list<Studentas>& src,
                        std::list<Studentas>& vargs,
-                       std::list<Studentas>& kiet) {
-    vargs.clear(); kiet.clear();
-    std::partition_copy(src.begin(), src.end(),
-                        std::back_inserter(vargs),
-                        std::back_inserter(kiet),
-                        yraVargsiukas);
-}
-void split_strat2_vector(std::vector<Studentas>& all,
-                         std::vector<Studentas>& vargs) {
+                       std::list<Studentas>& kiet)
+{
     vargs.clear();
-    auto mid = std::partition(all.begin(), all.end(), yraVargsiukas);
-    std::move(all.begin(), mid, std::back_inserter(vargs));
-    all.erase(all.begin(), mid);
+    kiet.clear();
+
+    for (const auto& s : src) {
+        if (s.galutinis < 5.0)
+            vargs.push_back(s);
+        else
+            kiet.push_back(s);
+    }
 }
 
-void split_strat2_list(std::list<Studentas>& all,
-                       std::list<Studentas>& vargs) {
+void split_strat2_vector(std::vector<Studentas>& grupe,
+                         std::vector<Studentas>& vargs)
+{
     vargs.clear();
-    for (auto it = all.begin(); it != all.end();) {
-        if (yraVargsiukas(*it)) {
-            auto cur = it++;
-            vargs.splice(vargs.end(), all, cur);
-        } else ++it;
+    vargs.reserve(grupe.size());
+
+    size_t newSize = 0;
+
+    for (size_t i = 0; i < grupe.size(); i++) {
+
+        if (grupe[i].galutinis < 5.0) {
+            vargs.push_back(grupe[i]);
+        }
+        else {
+            grupe[newSize++] = std::move(grupe[i]);
+        }
     }
+    grupe.erase(grupe.begin() + newSize, grupe.end());
+}
+void split_strat2_list(std::list<Studentas>& grupe,
+                       std::list<Studentas>& vargs)
+{
+    vargs.clear();
+
+    for (auto it = grupe.begin(); it != grupe.end(); ) {
+        if (it->galutinis < 5.0) {
+            vargs.push_back(*it);
+            it = grupe.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+void split_strat3_vector(std::vector<Studentas>& all,
+                         std::vector<Studentas>& vargs) {
+    vargs.clear();
+    vargs.reserve(all.size() / 2);
+    std::remove_copy_if(all.begin(), all.end(),
+                        std::back_inserter(vargs),
+                        [](const Studentas& s){ return s.galutinis >= 5.0; });
+
+    auto it = std::remove_if(all.begin(), all.end(),
+                             [](const Studentas& s){ return s.galutinis < 5.0; });
+    all.erase(it, all.end());
+
+    all.shrink_to_fit();
+    vargs.shrink_to_fit();
 }
 void split_strat3_vector(std::vector<Studentas>& all,
                          std::vector<Studentas>& vargs) {
